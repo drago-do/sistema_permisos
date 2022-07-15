@@ -1,0 +1,38 @@
+.contenido {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.fila {
+  margin-bottom: 30px;
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.etiqueta {
+  width: 30%;
+  text-align: start;
+}
+.area-texto {
+  width: 65%;
+  padding: 5px 10px;
+  margin: 0 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.area-texto:focus {
+  border: 1px solid #b2c9e8;
+}
+
+.selector {
+  width: 30%;
+  margin: 0 20px;
+}
