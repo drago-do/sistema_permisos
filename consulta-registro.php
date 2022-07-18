@@ -48,21 +48,6 @@
             </datalist>
             <button class="btn btn-secondary" id="buscar-id">Buscar</button>
           </div>
-          <div class="fila">
-            <label for="buscador-nombre" class="etiqueta">Buscar por nombre o razon</label>
-            <input class="area-texto" list="listaDeNombres" id="buscador-nombre" placeholder="Escribe para buscar..." maxlength="50">
-            <datalist id="listaDeNombres">
-              <?php
-              require_once("./CRUDPHP/crud.php");
-              $nuevaConsulta = CrudPHP::singleton();
-              $ids = $nuevaConsulta->obtenerNombreExpediente();
-              foreach ($ids as $id) {
-                echo "<option value='" . $id['nombre_razonSocial'] . "'>";
-              }
-              ?>
-            </datalist>
-            <button class="btn btn-secondary" id="buscar-nombre">Buscar</button>
-          </div>
 
           <!-- Respuesta de servidor -->
           <div class="contenido" id="respuesta">
@@ -85,7 +70,7 @@
             echo "<tbody>";
             foreach ($registrosRecientes as $registro) {
               echo "<tr>";
-              echo "<td>" . $registro['id_identificador'] . $registro['id_expediente'] . "</td>";
+              echo "<td>" . $registro['id_expediente'] . "</td>";
               echo "<td>" . $registro['nombre_razonSocial'] . "</td>";
               echo "<td>" . $registro['denominacion'] . "</td>";
               echo "<td>" . $registro['fecha_apertura'] . "</td>";

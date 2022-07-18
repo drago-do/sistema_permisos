@@ -31,6 +31,21 @@ class CrudPHP
     return self::$instancia;
   }
 
+  public function verificarDatosObligatorios($colonia, $localidad, $nombreGiro)
+  {
+    try {
+      $query = $this->dbh->prepare("SELECT (SELECT nombre FROM colonias WHERE nombre LIKE ?) as colonia, (SELECT nombre FROM localidades WHERE nombre LIKE ?) AS localidad, (SELECT nombre FROM giros_comerciales WHERE nombre LIKE ?)as giro;");
+      $query->bindParam(1, $colonia);
+      $query->bindParam(2, $localidad);
+      $query->bindParam(3, $nombreGiro);
+      $query->execute();
+      return $query->fetchAll();
+      $this->dbh = null;
+    } catch (PDOException $e) {
+      $e->getMessage();
+    }
+  }
+
   public function insertarNuevaLicencia($idLicencia, $nombre, $denominacion, $rfc, $predial, $agua, $datosFiscales, $giroComercial, $descripcion, $ventaAlcohol, $observaciones)
   {
     try {
@@ -231,7 +246,7 @@ ORDER BY `principal_licencia`.`id_expediente` DESC;");
   public function mostrarRegistrosRecientes()
   {
     try {
-      $query = $this->dbh->prepare("SELECT * FROM principal_licencia LIMIT 0, 5");
+      $query = $this->dbh->prepare("SELECT * FROM principal_licencia ORDER BY `principal_licencia`.`id_expediente` DESC LIMIT 0, 5");
       $query->execute();
       return $query->fetchAll();
       $this->dbh = null;

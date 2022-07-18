@@ -258,10 +258,13 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 
+
+
+
   <script>
     // Funcion para validar que el usuario ingrese todos los campos de forma correcta
     function validarFormulario() {
-
+      var datosValidos = true;
       // recuperar value del select con id "id-licencia"
       var idLicencia = document.getElementById("id-licencia").value;
       // input type="datetime-local"
@@ -299,32 +302,6 @@
       // input type="text"
       var observaciones = document.getElementById("observaciones").value;
       // Verificando datos
-      console.log("Licencia: " + idLicencia);
-      console.log("ID Expediente: " + id_expediente);
-      console.log("Fecha: " + fecha);
-      console.log("Nombre: " + nombre);
-      console.log("Denominación: " + denominacion);
-      console.log("RFC: " + rfc);
-      console.log("Cta Predial: " + ctaPredial);
-      console.log("Cta Agua: " + ctaAgua);
-      console.log("Datos Fiscales: " + datosFiscales);
-      console.log("Hora Apertura: " + horaApertura);
-      console.log("Hora Cierre: " + horaCierre);
-      console.log("Dia Lunes: " + diaLunes);
-      console.log("Dia Martes: " + diaMartes);
-      console.log("Dia Miercoles: " + diaMiercoles);
-      console.log("Dia Jueves: " + diaJueves);
-      console.log("Dia Viernes: " + diaViernes);
-      console.log("Dia Sabado: " + diaSabado);
-      console.log("Dia Domingo: " + diaDomingo);
-      console.log("Calle: " + calle);
-      console.log("Localidad: " + localidad);
-      console.log("Colonia: " + colonia);
-      console.log("Giro: " + giro);
-      console.log("Venta Alcohol: " + ventaAlcohol);
-      console.log("Detalles Giro: " + detallesGiro);
-      console.log("Costo Apertura: " + costoApertura);
-      console.log("Observaciones: " + observaciones);
       nombre = nombre != "" ? nombre : "SIN DATOS";
       denominacion = denominacion != "" ? denominacion : "SIN DATOS";
       rfc = rfc != "" ? rfc : "SIN DATOS";
@@ -334,10 +311,13 @@
       horaApertura = horaApertura != "" ? horaApertura : "SIN DATOS";
       horaCierre = horaCierre != "" ? horaCierre : "SIN DATOS";
       calle = calle != "" ? calle : "SIN DATOS";
-      localidad = localidad != "" ? localidad : "SIN DATOS";
-      colonia = colonia != "" ? colonia : "SIN DATOS";
-      giro = giro != "" ? giro : "SIN DATOS";
       costoApertura = costoApertura != "" ? costoApertura : 0;
+      if (costoApertura == "") {
+        $("#costo-apertura").addClass("is-invalid");
+        datosValidos = false;
+      } else {
+        $("#costo-apertura").removeClass("is-invalid");
+      }
 
       diaLunes = diaLunes ? 1 : 0;
       diaMartes = diaMartes ? 1 : 0;
@@ -352,47 +332,76 @@
       horaApertura = horaApertura + ":00";
       horaCierre = horaCierre + ":00";
 
+      //Comprobacion campo localidad
+      var dataListLocalidad = $("#listaDelocalidades").find("option[value='" + localidad + "']");
+      if (!(dataListLocalidad != null && dataListLocalidad.length > 0)) {
+        $("#localidad").addClass("is-invalid");
+        datosValidos = false;
+      } else {
+        $("#localidad").removeClass("is-invalid")
+      }
+      //Comprobacion campo colonia
+      var dataListColonia = $("#listaDeColonias").find("option[value='" + colonia + "']");
+      if (!(dataListColonia != null && dataListColonia.length > 0)) {
+        $("#colonia").addClass("is-invalid")
+        datosValidos = false;
+      } else {
+        $("#colonia").removeClass("is-invalid")
+      }
+      //Comprobacion campo giro principal
+      var dataListGiro = $("#listaDeGiros").find("option[value='" + giro + "']");
+      if (!(dataListGiro != null && dataListGiro.length > 0)) {
+        $("#giro").addClass("is-invalid")
+        datosValidos = false;
+      } else {
+        $("#giro").removeClass("is-invalid")
+      }
 
-      $.ajax({
-        url: "./php/registrar-nueva-licencia.php",
-        type: "POST",
-        data: {
-          idLicencia: idLicencia,
-          id_expediente: id_expediente,
-          fecha: fecha,
-          nombre: nombre,
-          denominacion: denominacion,
-          rfc: rfc,
-          ctaPredial: ctaPredial,
-          ctaAgua: ctaAgua,
-          datosFiscales: datosFiscales,
-          horaApertura: horaApertura,
-          horaCierre: horaCierre,
-          diaLunes: diaLunes,
-          diaMartes: diaMartes,
-          diaMiercoles: diaMiercoles,
-          diaJueves: diaJueves,
-          diaViernes: diaViernes,
-          diaSabado: diaSabado,
-          diaDomingo: diaDomingo,
-          calle: calle,
-          localidad: localidad,
-          colonia: colonia,
-          giro: giro,
-          ventaAlcohol: ventaAlcohol,
-          detallesGiro: detallesGiro,
-          costoApertura: costoApertura,
-          observaciones: observaciones
-        },
-        success: function(data) {
-          $("#resultado-registro").html(data);
-          //Esperar 2 segundos para redirijir a php/pdf.php con parametro id_expediente
-          setTimeout(function() {
-            window.location.href = "./php/pdf.php?id=" + id_expediente;
-          }, 2000);
+      if (datosValidos) {
+        $.ajax({
+          url: "./php/registrar-nueva-licencia.php",
+          type: "POST",
+          data: {
+            idLicencia: idLicencia,
+            id_expediente: id_expediente,
+            fecha: fecha,
+            nombre: nombre,
+            denominacion: denominacion,
+            rfc: rfc,
+            ctaPredial: ctaPredial,
+            ctaAgua: ctaAgua,
+            datosFiscales: datosFiscales,
+            horaApertura: horaApertura,
+            horaCierre: horaCierre,
+            diaLunes: diaLunes,
+            diaMartes: diaMartes,
+            diaMiercoles: diaMiercoles,
+            diaJueves: diaJueves,
+            diaViernes: diaViernes,
+            diaSabado: diaSabado,
+            diaDomingo: diaDomingo,
+            calle: calle,
+            localidad: localidad,
+            colonia: colonia,
+            giro: giro,
+            ventaAlcohol: ventaAlcohol,
+            detallesGiro: detallesGiro,
+            costoApertura: costoApertura,
+            observaciones: observaciones
+          },
+          success: function(data) {
+            $("#resultado-registro").html(data);
+            //Esperar 2 segundos para redirijir a php/pdf.php con parametro id_expediente
+            setTimeout(function() {
+              window.location.href = "./php/pdf.php?id=" + id_expediente;
+            }, 2000);
 
-        }
-      });
+          }
+        });
+      } else {
+        $("#resultado-registro").html("<div class='alert alert-danger' role='alert'> El registro no se realizará hasta que se llenen los campos obligatorios correctamente.</div>");
+        return;
+      }
     }
   </script>
 </body>
