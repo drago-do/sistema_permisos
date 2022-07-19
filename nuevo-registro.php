@@ -10,6 +10,17 @@
 </head>
 
 <body>
+  <!-- <?php
+
+        use ParagonIE\ConstantTime\Encoding;
+
+        session_start();
+        if (!isset($_SESSION["correo"])) {
+          $_SESSION["correo"] = null;
+          session_destroy();
+          header('Location: http://localhost/index.php');
+        }
+        ?> -->
   <div class="container">
     <div class="card text-center">
       <div class="card-header">
@@ -22,6 +33,9 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="./pagar-registro.php">Pagar Registro</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn btn-danger" href="./php/cerrar-sesion.php">Cerrar Sesion</a>
           </li>
         </ul>
       </div>
@@ -311,7 +325,7 @@
       horaApertura = horaApertura != "" ? horaApertura : "SIN DATOS";
       horaCierre = horaCierre != "" ? horaCierre : "SIN DATOS";
       calle = calle != "" ? calle : "SIN DATOS";
-      costoApertura = costoApertura != "" ? costoApertura : 0;
+
       if (costoApertura == "") {
         $("#costo-apertura").addClass("is-invalid");
         datosValidos = false;

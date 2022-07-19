@@ -10,6 +10,14 @@
 </head>
 
 <body>
+  <?php
+  session_start();
+  if (!isset($_SESSION["correo"])) {
+    $_SESSION["correo"] = null;
+    session_destroy();
+    header('Location: http://localhost/index.php');
+  }
+  ?>
   <div class="container">
     <div class="card text-center">
       <div class="card-header">

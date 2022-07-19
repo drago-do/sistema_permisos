@@ -255,6 +255,19 @@ ORDER BY `principal_licencia`.`id_expediente` DESC;");
     }
   }
 
+  public function usuarioExiste($correo)
+  {
+    try {
+      $query = $this->dbh->prepare("SELECT * FROM usuarios WHERE correo LIKE ?");
+      $query->bindParam(1, $correo);
+      $query->execute();
+      return $query->fetchAll();
+      $this->dbh = null;
+    } catch (PDOException $e) {
+      $e->getMessage();
+    }
+  }
+
   public function obtenerPagosDeLicencia($id)
   {
     try {
